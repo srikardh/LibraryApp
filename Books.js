@@ -1,0 +1,100 @@
+let myLibrary = [];
+
+function Book(title, author, pages, status) {
+    if (!new.target) {
+        console.log("Use new to create a Book object");
+    }
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.status = status;
+    this.id = crypto.randomUUID();
+}
+
+Book.prototype.changeStatus = function () {
+    if (this.status === "Read")
+        this.status = "Not Read";
+    else
+        this.status = "Read";
+}
+
+function addBookToLibrary(title, author, pages, status) {
+    const book = new Book(title, author, pages, status);
+    myLibrary.push(book);
+}
+
+addBookToLibrary("Forest of Enchantments", "Srikar", 400, "Read");
+addBookToLibrary("Dune", "Frank Herbert", 900, "Not Read");
+
+function displayBooks() {
+    const tbody = document.getElementById("book-list");
+    tbody.innerHTML = "";
+    myLibrary.forEach(book => {
+        const tr = document.createElement("tr");
+        tr.dataset.id = book.id;
+        const tdTitle = document.createElement("td");
+        tdTitle.textContent = book.title;
+        const tdAuthor = document.createElement("td");
+        tdAuthor.textContent = book.author;
+        const tdPages = document.createElement("td");
+        tdPages.textContent = book.pages;
+        const tdStatus = document.createElement("td");
+        tdStatus.textContent = book.status;
+        const tdDeleteBook = document.createElement("td");
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.addEventListener("click", () => {
+            const bookId = tr.dataset.id;
+            myLibrary = myLibrary.filter(book => {
+                return book.id !== bookId;
+            });
+            displayBooks();
+        })
+        const tdChangeStatus = document.createElement("td");
+        const changeStatusBtn = document.createElement("button");
+        changeStatusBtn.textContent = "Change Read Status";
+        changeStatusBtn.classList.add("status-btn");
+        changeStatusBtn.addEventListener("click", () => {
+            const bookId = tr.dataset.id;
+            const book = myLibrary.find(book => book.id === bookId);
+            book.changeStatus();
+            displayBooks();
+        })
+        tdChangeStatus.appendChild(changeStatusBtn);
+        tdDeleteBook.appendChild(deleteBtn);
+        tr.append(tdTitle);
+        tr.append(tdAuthor);
+        tr.append(tdPages);
+        tr.append(tdStatus);
+        tr.append(tdDeleteBook);
+        tr.append(tdChangeStatus);
+        tbody.append(tr);
+    });
+}
+
+const addBookBtn = document.getElementById("add-book-btn");
+const dialog = document.getElementById("book-dialog");
+const form = document.getElementById("book-form");
+const cancelbtn = document.getElementById("cancel-btn");
+addBookBtn.addEventListener("click", () => {
+    dialog.showModal();
+});
+cancelbtn.addEventListener("click", () => {
+    dialog.close();
+})
+
+form.addEventListener("submit", submitForm);
+function submitForm(event) {
+    event.preventDefault();
+    const title = document.getElementById("title").value;
+    const author = document.getElementById("author").value;
+    const pages = document.getElementById("pages").value;
+    const status = document.getElementById("status").value;
+    addBookToLibrary(title, author, pages, status);
+    displayBooks();
+    form.reset();
+    dialog.close();
+}
+
+console.log(myLibrary);

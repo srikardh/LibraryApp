@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="Stylesheet.css">
+</head>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Pages</th>
+                <th>Status</th>
+                <th>Actions</th>
+                <th>Change status</th>
+            </tr>
+        </thead>
+        <tbody id="book-list">
+
+        </tbody>
+    </table>
+
+    <button id="add-book-btn">Add Book</button>
+
+    <dialog id="book-dialog">
+        <form id="book-form">
+            <label for="Title">Book Title</label><br>
+            <input type="text" id="title" name="Title"><br>
+            <label for="Author">Author</label><br>
+            <input type="text" id="author" name="Author"><br>
+            <label for="Pages"># of Pages</label><br>
+            <input type="text" id="pages" name="Pages"><br>
+            <label for="Status">Status</label><br>
+            <input type="text" id="status" name="Status"><br>
+            <input type="submit" id="subForm" value="submit">
+            <button type="button" id="cancel-btn">Cancel</button>
+        </form>
+    </dialog>
+
+
+    <script src="Books.js"></script>
+</body>
+
+</html>
