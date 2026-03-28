@@ -1,4 +1,9 @@
 let myLibrary = [];
+myLibrary = (JSON.parse(localStorage.getItem("myLibrary")) || []).map(book => {
+    const b = new Book(book.title, book.author, book.pages, book.status);
+    b.id = book.id;
+    return b;
+})
 
 function Book(title, author, pages, status) {
     if (!new.target) {
@@ -20,15 +25,15 @@ Book.prototype.changeStatus = function () {
 
 function addBookToLibrary(title, author, pages, status) {
     const book = new Book(title, author, pages, status);
-    myLibrary.push(book);
-}
 
-addBookToLibrary("Forest of Enchantments", "Srikar", 400, "Read");
-addBookToLibrary("Dune", "Frank Herbert", 900, "Not Read");
+    myLibrary.push(book);
+    localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+}
 
 function displayBooks() {
     const tbody = document.getElementById("book-list");
     tbody.innerHTML = "";
+
     myLibrary.forEach(book => {
         const tr = document.createElement("tr");
         tr.dataset.id = book.id;
@@ -47,9 +52,11 @@ function displayBooks() {
         deleteBtn.addEventListener("click", () => {
             const bookId = tr.dataset.id;
             myLibrary = myLibrary.filter(book => {
-                return book.id !== bookId;
+                return book.id !== bookId; //filter
             });
             displayBooks();
+            localStorage.setItem("mylibrary", JSON.stringify(myLibrary));
+
         })
         const tdChangeStatus = document.createElement("td");
         const changeStatusBtn = document.createElement("button");
@@ -57,9 +64,11 @@ function displayBooks() {
         changeStatusBtn.classList.add("status-btn");
         changeStatusBtn.addEventListener("click", () => {
             const bookId = tr.dataset.id;
-            const book = myLibrary.find(book => book.id === bookId);
+            const book = myLibrary.find(book => book.id === bookId); //find
             book.changeStatus();
             displayBooks();
+            localStorage.setItem("mylibrary", JSON.stringify(myLibrary));
+
         })
         tdChangeStatus.appendChild(changeStatusBtn);
         tdDeleteBook.appendChild(deleteBtn);
@@ -91,6 +100,11 @@ function submitForm(event) {
     const author = document.getElementById("author").value;
     const pages = document.getElementById("pages").value;
     const status = document.getElementById("status").value;
+    // const formData = new FormData(event); // we don't have to use document.getElementById everytime. Because we have event object which has event type, target, and preventDefault();
+    // const title = formData.get("title");
+    // const author = formData.get("author");
+    // const pages = formData.get("pages");
+    // const status = formData.get("status");
     addBookToLibrary(title, author, pages, status);
     displayBooks();
     form.reset();
