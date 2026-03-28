@@ -55,7 +55,7 @@ function displayBooks() {
                 return book.id !== bookId; //filter
             });
             displayBooks();
-            localStorage.setItem("mylibrary", JSON.stringify(myLibrary));
+            localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
 
         })
         const tdChangeStatus = document.createElement("td");
